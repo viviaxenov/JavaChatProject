@@ -12,18 +12,23 @@ import java.util.Date;
 
 public class Message implements Serializable
 {
-	private long userID;
 
 	public String userName;
 	public String text;	
 	public Date timeStamp;
 
-	public Message(long userID, String userName, String text)
+	public Message(String userName, String text)
 	{
 		this.userName = userName;	
-		this.userID = userID;	
+		this.text = text;
 		
 		this.timeStamp = new Date();
+	}
+
+	public String toString()
+	{
+		return timeStamp.toString() + " | " +	
+			userName + ": " + text;
 	}
 }
 

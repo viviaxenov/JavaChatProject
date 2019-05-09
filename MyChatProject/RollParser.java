@@ -2,8 +2,36 @@ package MyChatProject;
 
 import java.util.Random;
 
+
+
+/**
+* <h1> RollParser </h1>
+* Class for parsing strings with dice rolls and modifiers
+* The notation is following:
+* Ndk means to roll a k-sided die N times and return the sum.
+* d% means d100.
+* Adk means to roll a k-sided die with advantage (roll twice, choose highest).
+* Ddk means to roll a k-sided die with disadvantage (roll twice, choose lowest).
+* Adding and substracting integers also supported.
+* 
+* <p>
+* <i>Example:</i> 
+* d% + 2d10 + Ad6 + Dd4 - 4
+* <p>
+* This will be parsed as following: first, roll a 100-sided die (i.e. result is 57), add two rolls of 10-sided die (let it be 7 and 4, total 11),
+* add a roll of a 6-sided die with advantage (1, 5, so we choose 5), a roll of 4-sided die with disadvantage (2, 4, so we choose 2) and finally subtract 4.
+* The result will be 57 + 11 + 5 + 2 - 4 = 71
+* <p>
+* The class will try to parse the string, if it's OK, it sets status flag to true and result - to total roll result; otherwise status is set to false;
+* 
+* @author viviaxenov
+* @since 2019-04-11
+* 
+*/
 public class RollParser
 {
+
+
 
 	private String roll_str;
 	private char[] s;
@@ -19,13 +47,18 @@ public class RollParser
 		status = true;
 	}
 
+	/**
+	* Parses a roll string
+	* If parsed, status is set to true, result - to total result of the roll, 
+	* else status is set to false
+	* @param roll_string String to parse
+	*/
 	public void parseRoll(String roll_string)
 	{
 		roll_str = roll_string.replaceAll("\\s", "");
 		roll_str = roll_str.replace("-", "+-");
 		if(roll_str.charAt(0) == '+')
 			roll_str = roll_str.substring(1);
-		System.out.println(roll_str);
 
 		s = roll_str.toCharArray();
 		cur_pos = 0;
