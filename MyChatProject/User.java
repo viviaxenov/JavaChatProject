@@ -22,11 +22,16 @@ public class User implements Serializable
 
 	Socket connection;
 
-	public User(String name, ListIterator curr, Socket s)
+	ObjectInputStream Receiver;
+	ObjectOutputStream Sender;
+
+	public User(String name, ListIterator curr, Socket sock, ObjectInputStream r, ObjectOutputStream s)
 	{
 		this.name = name;
 		this.CurrentMessage = curr;
-		this.connection = s;
+		this.connection = sock;
+		Receiver = r;
+		Sender = s;
 	}		
 
 	

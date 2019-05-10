@@ -29,22 +29,25 @@ public class Server
 		{
 			Socket sock = Listener.accept();
 			InputStream is = sock.getInputStream();
-			ObjectInputStream objstream = new ObjectInputStream(is);
+		
+			ObjectInputStream Receiver = new ObjectInputStream(is);
+			ObjectOutputStream Sender = new ObjectOutputStream(sock.getOutputStream());
 			Object input;
 			try
 			{
-				input = objstream.readObject();
+				input = Receiver.readObject();
 				if(! (input instanceof String))
 					throw new IllegalArgumentException();
 				String UserName = (String) input;	
 				Date LoginTime = new Date();
 				IDCount++;	
 
-				User NewUser = new User(UserName, Users.listIterator(0), sock);
+				User NewUser = new User(UserName, Users.listIterator(0), sock, Receiver, Sender);
 				
 				Users.add(NewUser);
 
-				new UserReceiver(NewUser, MessageQueue, objstream).start();
+				new UserReceiver(NewUser, MessageQueue).start();
+				new UserSender(NewUser).start();
 			}
 			catch(IOException ioe)
 			{
@@ -77,18 +80,58 @@ public class Server
 
 }
 
+class UserSender extends Thread
+{
+	User u;
+	UserSender(User u)
+	{
+		this.u = u;
+	}	
+	public void run()
+	{
+		while(true)
+		{
+			if(! u.CurrentMessage.hasNext())
+			{
+				try
+				{
+					Thread.sleep(50);
+				}
+				catch(InterruptedException e)
+				{
+					System.out.println("Sender for user " + u.name + " interrupted; Details:\n");
+					e.printStackTrace();
+				}
+				continue;
+			}
+			else
+			{
+				Message ToBeSent = (Message) u.CurrentMessage.next();
+				try
+				{
+					u.Sender.writeObject(ToBeSent);
+				}
+				catch(IOException e)
+				{
+					System.out.println("Sender for user " + u.name + " failed to send; Details:\n");
+					e.printStackTrace();
+					return;
+				}
+			}
+		}
+	}
+}
+
 class UserReceiver extends Thread
 {
 
 	User u;
 	LinkedList<Message> MessageQueue;	
-	ObjectInputStream receiver;
 
-	UserReceiver(User u, LinkedList<Message> q, ObjectInputStream receiver)
+	UserReceiver(User u, LinkedList<Message> q)
 	{
 		this.MessageQueue = q;	
 		this.u = u;
-		this.receiver = receiver;
 	}
 
 	public void run()
@@ -99,7 +142,7 @@ class UserReceiver extends Thread
 		{
 			try
 			{
-				Object received = this.receiver.readObject();
+				Object received = u.Receiver.readObject();
 				if(!(received instanceof Message))
 					throw new IllegalArgumentException();
 				Message msg = (Message) received;
