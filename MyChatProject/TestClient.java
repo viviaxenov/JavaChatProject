@@ -31,8 +31,9 @@ public class TestClient
 			
 			while(true)
 			{
-				System.out.println("Type your message: ");
 				String msgText = System.console().readLine();
+				if(msgText.startsWith("\\exit"))
+					System.exit(1);
 				Message msg = new Message(UserName, msgText);
 				writer.writeObject(msg);
 				Thread.sleep(5000);

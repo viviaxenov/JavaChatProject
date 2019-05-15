@@ -10,7 +10,7 @@ public class Server
 {
 	static String ServName = "Death Star comm";
 	static String greeting = "May the force be with  ";
-	static int prevMsg = 1;
+	static int prevMsg = 5;
 
 	static final int port = 9000;
 
@@ -61,7 +61,7 @@ public class Server
 		{
 			MessageQueue = mq;
 			Connection = c;
-			int k = MessageQueue.size() - 1;
+			int k = MessageQueue.size() - prevMsg;
 			CurrentMessage = k > 0 ? k : 0;
 		}	
 		public void run()
@@ -78,7 +78,8 @@ public class Server
 						{
 							CurrentMessage++;
 							ToBeSent =  MessageQueue.get(CurrentMessage);
-							Sender.writeObject(ToBeSent);
+							if(!(ToBeSent.text.equals("")))
+								Sender.writeObject(ToBeSent);
 							continue;
 						}
 					}
@@ -87,7 +88,7 @@ public class Server
 			}
 			catch(Exception e)
 			{
-				System.out.println("Sender for failed to send; Details:\n");
+				System.out.println("Sender failed to send; Details:\n");
 				e.printStackTrace();
 				return;
 			}
@@ -126,7 +127,10 @@ public class Server
 				System.out.println((new Date()).toString() + " | " + msg.userName);
 				
 				Message welcome = new Message(ServName, greeting + userName);
-				MessageQueue.add(welcome);
+				synchronized(MessageQueue)
+				{	
+					MessageQueue.add(welcome);
+				}
 				
 				while(true)
 				{
