@@ -30,9 +30,9 @@ public class ClientWindow {
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		// Generated using JFormDesigner Evaluation license - Vitaliy Aksenov
-		ChatClient = new JFrame();
-		UsernameLable = new JLabel();
-		HostnmaneLabel = new JLabel();
+		ChatFrame = new JFrame();
+		UsernameLabel = new JLabel();
+		HostnameLabel = new JLabel();
 		UsernameField = new JTextField();
 		textField2 = new JTextField();
 		ConnectButton = new JButton();
@@ -44,38 +44,39 @@ public class ClientWindow {
 		separator2 = new JSeparator();
 		InputField = new JTextField();
 
-		//======== ChatClient ========
+		//======== ChatFrame ========
 		{
-			ChatClient.setResizable(false);
-			ChatClient.setTitle("Best chat ever");
-			var ChatClientContentPane = ChatClient.getContentPane();
-			ChatClientContentPane.setLayout(null);
+			ChatFrame.setResizable(false);
+			ChatFrame.setTitle("Best chat ever");
+			ChatFrame.setAlwaysOnTop(true);
+			var ChatFrameContentPane = ChatFrame.getContentPane();
+			ChatFrameContentPane.setLayout(null);
 
-			//---- UsernameLable ----
-			UsernameLable.setText("Username");
-			ChatClientContentPane.add(UsernameLable);
-			UsernameLable.setBounds(new Rectangle(new Point(15, 15), UsernameLable.getPreferredSize()));
+			//---- UsernameLabel ----
+			UsernameLabel.setText("Username");
+			ChatFrameContentPane.add(UsernameLabel);
+			UsernameLabel.setBounds(new Rectangle(new Point(15, 15), UsernameLabel.getPreferredSize()));
 
-			//---- HostnmaneLabel ----
-			HostnmaneLabel.setText("Hostname");
-			ChatClientContentPane.add(HostnmaneLabel);
-			HostnmaneLabel.setBounds(15, 45, 47, 13);
+			//---- HostnameLabel ----
+			HostnameLabel.setText("Hostname");
+			ChatFrameContentPane.add(HostnameLabel);
+			HostnameLabel.setBounds(15, 45, 47, 13);
 
 			//---- UsernameField ----
 			UsernameField.addActionListener(e -> UsernameFieldActionPerformed(e));
-			ChatClientContentPane.add(UsernameField);
+			ChatFrameContentPane.add(UsernameField);
 			UsernameField.setBounds(70, 15, 320, UsernameField.getPreferredSize().height);
 
 			//---- textField2 ----
 			textField2.setText("localhost");
-			ChatClientContentPane.add(textField2);
+			ChatFrameContentPane.add(textField2);
 			textField2.setBounds(70, 42, 320, 19);
 
 			//---- ConnectButton ----
 			ConnectButton.setText("Connect!");
 			ConnectButton.setEnabled(false);
 			ConnectButton.addActionListener(e -> ConnectButtonActionPerformed(e));
-			ChatClientContentPane.add(ConnectButton);
+			ChatFrameContentPane.add(ConnectButton);
 			ConnectButton.setBounds(305, 75, 85, ConnectButton.getPreferredSize().height);
 
 			//======== scrollPaneChat ========
@@ -85,52 +86,52 @@ public class ClientWindow {
 				textAreaChat.setEditable(false);
 				scrollPaneChat.setViewportView(textAreaChat);
 			}
-			ChatClientContentPane.add(scrollPaneChat);
+			ChatFrameContentPane.add(scrollPaneChat);
 			scrollPaneChat.setBounds(17, 125, 375, 220);
-			ChatClientContentPane.add(separator1);
+			ChatFrameContentPane.add(separator1);
 			separator1.setBounds(15, 110, 375, 15);
 
 			//---- ChatLabel ----
 			ChatLabel.setText("Chat:");
-			ChatClientContentPane.add(ChatLabel);
+			ChatFrameContentPane.add(ChatLabel);
 			ChatLabel.setBounds(15, 95, ChatLabel.getPreferredSize().width, 18);
 
 			//---- PromptLabel ----
 			PromptLabel.setText("Your message:");
-			ChatClientContentPane.add(PromptLabel);
+			ChatFrameContentPane.add(PromptLabel);
 			PromptLabel.setBounds(15, 350, 75, 13);
-			ChatClientContentPane.add(separator2);
+			ChatFrameContentPane.add(separator2);
 			separator2.setBounds(15, 365, 380, 10);
 
 			//---- InputField ----
 			InputField.addActionListener(e -> InputFieldActionPerformed(e));
-			ChatClientContentPane.add(InputField);
+			ChatFrameContentPane.add(InputField);
 			InputField.setBounds(17, 375, 375, InputField.getPreferredSize().height);
 
 			{ // compute preferred size
 				Dimension preferredSize = new Dimension();
-				for(int i = 0; i < ChatClientContentPane.getComponentCount(); i++) {
-					Rectangle bounds = ChatClientContentPane.getComponent(i).getBounds();
+				for(int i = 0; i < ChatFrameContentPane.getComponentCount(); i++) {
+					Rectangle bounds = ChatFrameContentPane.getComponent(i).getBounds();
 					preferredSize.width = Math.max(bounds.x + bounds.width, preferredSize.width);
 					preferredSize.height = Math.max(bounds.y + bounds.height, preferredSize.height);
 				}
-				Insets insets = ChatClientContentPane.getInsets();
+				Insets insets = ChatFrameContentPane.getInsets();
 				preferredSize.width += insets.right;
 				preferredSize.height += insets.bottom;
-				ChatClientContentPane.setMinimumSize(preferredSize);
-				ChatClientContentPane.setPreferredSize(preferredSize);
+				ChatFrameContentPane.setMinimumSize(preferredSize);
+				ChatFrameContentPane.setPreferredSize(preferredSize);
 			}
-			ChatClient.pack();
-			ChatClient.setLocationRelativeTo(ChatClient.getOwner());
+			ChatFrame.setSize(410, 445);
+			ChatFrame.setLocationRelativeTo(ChatFrame.getOwner());
 		}
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	// Generated using JFormDesigner Evaluation license - Vitaliy Aksenov
-	private JFrame ChatClient;
-	private JLabel UsernameLable;
-	private JLabel HostnmaneLabel;
+	private JFrame ChatFrame;
+	private JLabel UsernameLabel;
+	private JLabel HostnameLabel;
 	private JTextField UsernameField;
 	private JTextField textField2;
 	private JButton ConnectButton;
