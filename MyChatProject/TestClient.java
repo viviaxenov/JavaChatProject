@@ -9,7 +9,7 @@ public class TestClient
 {
 	static final int port = 9000;
 	
-	public static void main(String[] args) throws IOException
+	public static void main(String[] args) 
 	{
 		String UserName = "Big Sych";
 	
@@ -20,10 +20,14 @@ public class TestClient
 	
 		try
 		{
-			Socket sender = new Socket("localhost", port); 
+			Socket sock = new Socket("localhost", port); 
 
-			ObjectOutputStream writer = new ObjectOutputStream(sender.getOutputStream());
-			writer.writeObject(UserName);
+			ObjectOutputStream writer = new ObjectOutputStream(sock.getOutputStream());
+			ObjectInputStream receiver = new ObjectInputStream(sock.getInputStream());
+
+			writer.writeObject(new Message(UserName, ""));
+
+			(new RecvPrinter(receiver)).start();
 			
 			while(true)
 			{
@@ -31,6 +35,7 @@ public class TestClient
 				String msgText = System.console().readLine();
 				Message msg = new Message(UserName, msgText);
 				writer.writeObject(msg);
+				Thread.sleep(5000);
 			}
 
 		}
@@ -43,5 +48,42 @@ public class TestClient
 		
 		
 
+	}
+}
+
+class RecvPrinter extends Thread
+{
+	ObjectInputStream Receiver;
+
+	RecvPrinter(ObjectInputStream r)
+	{
+		Receiver = r;		
+	}
+
+	public void run()
+	{
+		while(true)
+		{
+			try
+			{
+				Object Received = Receiver.readObject();
+
+				if (! (Received instanceof Message))
+					throw new IllegalArgumentException();
+
+				System.out.println(((Message) Received).toString());
+			}
+			catch(IOException e)
+			{
+				System.out.println("Connection error; Details:\n");
+				e.printStackTrace();
+				System.exit(-1);
+			}
+			catch(IllegalArgumentException | ClassNotFoundException e)
+			{
+				System.out.println("Bad input from server; Details:\n");
+				e.printStackTrace();
+			}
+		}
 	}
 }
