@@ -1,3 +1,5 @@
+package MyChatProject;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -11,21 +13,27 @@ import javax.swing.*;
  * @author Vitaliy Aksenov
  */
 public class ClientWindow {
+
+	public static void main(String[] args)
+	{
+		new ClientWindow().ChatFrame.setVisible(true);
+	}
+
+
 	public ClientWindow() {
 		initComponents();
 	}
 
 	private void UsernameFieldActionPerformed(ActionEvent e) {
 		// TODO add your code here
+		ConnectButton.setEnabled(true);
 	}
 
-	private void ConnectButtonActionPerformed(ActionEvent e) {
-		// TODO add your code here
-	}
+//	private void ConnectButtonActionPerformed(ActionEvent e) {
+//		UsernameField.setEnabled(false);
+//		HostnameField.setEnabled(false);
+//	}
 
-	private void InputFieldActionPerformed(ActionEvent e) {
-		// TODO add your code here
-	}
 
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -34,7 +42,7 @@ public class ClientWindow {
 		UsernameLabel = new JLabel();
 		HostnameLabel = new JLabel();
 		UsernameField = new JTextField();
-		textField2 = new JTextField();
+		HostnameField = new JTextField();
 		ConnectButton = new JButton();
 		scrollPaneChat = new JScrollPane();
 		textAreaChat = new JTextArea();
@@ -51,6 +59,7 @@ public class ClientWindow {
 			ChatFrame.setAlwaysOnTop(true);
 			var ChatFrameContentPane = ChatFrame.getContentPane();
 			ChatFrameContentPane.setLayout(null);
+			ChatFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 			//---- UsernameLabel ----
 			UsernameLabel.setText("Username");
@@ -58,32 +67,33 @@ public class ClientWindow {
 			UsernameLabel.setBounds(new Rectangle(new Point(15, 15), UsernameLabel.getPreferredSize()));
 
 			//---- HostnameLabel ----
-			HostnameLabel.setText("Hostname");
+			HostnameLabel.setText("Host");
 			ChatFrameContentPane.add(HostnameLabel);
 			HostnameLabel.setBounds(15, 45, 47, 13);
 
 			//---- UsernameField ----
 			UsernameField.addActionListener(e -> UsernameFieldActionPerformed(e));
 			ChatFrameContentPane.add(UsernameField);
-			UsernameField.setBounds(70, 15, 320, UsernameField.getPreferredSize().height);
+			UsernameField.setBounds(90, 15, 300, UsernameField.getPreferredSize().height);
 
-			//---- textField2 ----
-			textField2.setText("localhost");
-			ChatFrameContentPane.add(textField2);
-			textField2.setBounds(70, 42, 320, 19);
+			//---- HostnameField ----
+			HostnameField.setText("localhost");
+			ChatFrameContentPane.add(HostnameField);
+			HostnameField.setBounds(90, 42, 300, 19);
 
 			//---- ConnectButton ----
 			ConnectButton.setText("Connect!");
 			ConnectButton.setEnabled(false);
-			ConnectButton.addActionListener(e -> ConnectButtonActionPerformed(e));
 			ChatFrameContentPane.add(ConnectButton);
-			ConnectButton.setBounds(305, 75, 85, ConnectButton.getPreferredSize().height);
+			ConnectButton.setBounds(285, 75, 105, ConnectButton.getPreferredSize().height);
 
 			//======== scrollPaneChat ========
 			{
 
 				//---- textAreaChat ----
 				textAreaChat.setEditable(false);
+				textAreaChat.setWrapStyleWord(true);
+				textAreaChat.setLineWrap(true);
 				scrollPaneChat.setViewportView(textAreaChat);
 			}
 			ChatFrameContentPane.add(scrollPaneChat);
@@ -99,14 +109,13 @@ public class ClientWindow {
 			//---- PromptLabel ----
 			PromptLabel.setText("Your message:");
 			ChatFrameContentPane.add(PromptLabel);
-			PromptLabel.setBounds(15, 350, 75, 13);
+			PromptLabel.setBounds(15, 350, 150, 13);
 			ChatFrameContentPane.add(separator2);
 			separator2.setBounds(15, 365, 380, 10);
 
 			//---- InputField ----
-			InputField.addActionListener(e -> InputFieldActionPerformed(e));
 			ChatFrameContentPane.add(InputField);
-			InputField.setBounds(17, 375, 375, InputField.getPreferredSize().height);
+			InputField.setBounds(15, 375, 375, InputField.getPreferredSize().height);
 
 			{ // compute preferred size
 				Dimension preferredSize = new Dimension();
@@ -121,11 +130,33 @@ public class ClientWindow {
 				ChatFrameContentPane.setMinimumSize(preferredSize);
 				ChatFrameContentPane.setPreferredSize(preferredSize);
 			}
-			ChatFrame.setSize(410, 445);
+			ChatFrame.setSize(410, 455);
 			ChatFrame.setLocationRelativeTo(ChatFrame.getOwner());
 		}
 		// JFormDesigner - End of component initialization  //GEN-END:initComponents
 	}
+
+
+	// Custom methods
+
+	public void Show()
+	{
+		ChatFrame.setVisible(true);
+	}
+
+	public void updateChatArea(String s)
+	{
+		textAreaChat.append(s + '\n');
+		textAreaChat.update(textAreaChat.getGraphics());
+	}
+	public void clearChatArea()
+	{
+		textAreaChat.setText("");
+		textAreaChat.update(textAreaChat.getGraphics());
+	}
+	
+
+
 
 	// JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
 	// Generated using JFormDesigner Evaluation license - Vitaliy Aksenov
@@ -133,7 +164,7 @@ public class ClientWindow {
 	private JLabel UsernameLabel;
 	private JLabel HostnameLabel;
 	private JTextField UsernameField;
-	private JTextField textField2;
+	private JTextField HostnameField;
 	private JButton ConnectButton;
 	private JScrollPane scrollPaneChat;
 	private JTextArea textAreaChat;
@@ -142,5 +173,22 @@ public class ClientWindow {
 	private JLabel PromptLabel;
 	private JSeparator separator2;
 	private JTextField InputField;
+
+	public JButton getConnectButton()
+	{
+		return ConnectButton;
+	}
+	public JTextField getUsernameField()
+	{
+		return UsernameField;
+	}
+	public JTextField getHostnameField()
+	{
+		return HostnameField;
+	}
+	public JTextField getInputField()
+	{
+		return InputField;
+	}
 	// JFormDesigner - End of variables declaration  //GEN-END:variables
 }

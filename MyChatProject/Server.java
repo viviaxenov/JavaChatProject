@@ -72,16 +72,16 @@ public class Server
 				while(true)
 				{
 					Message ToBeSent;
-					synchronized(MessageQueue)	
+					if(CurrentMessage < MessageQueue.size() - 1)
 					{
-						if(CurrentMessage < MessageQueue.size() - 1)
+						CurrentMessage++;
+						synchronized(MessageQueue)	
 						{
-							CurrentMessage++;
 							ToBeSent =  MessageQueue.get(CurrentMessage);
-							if(!(ToBeSent.text.equals("")))
-								Sender.writeObject(ToBeSent);
-							continue;
 						}
+						if(!(ToBeSent.text.equals("")))
+							Sender.writeObject(ToBeSent);
+						continue;
 					}
 					Thread.sleep(50);
 				}

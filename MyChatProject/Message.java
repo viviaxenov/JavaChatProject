@@ -13,14 +13,15 @@ import java.util.Date;
 public class Message implements Serializable
 {
 
-	public String userName;
-	public String text;	
-	public Date timeStamp;
+	public final String userName;
+	public final String text;	
+	public final Date timeStamp;
 
 	public Message(String userName, String text)
 	{
 		this.userName = userName;	
 		this.text = text;
+		
 		
 		this.timeStamp = new Date();
 	}
