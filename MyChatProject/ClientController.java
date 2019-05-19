@@ -24,35 +24,25 @@ public class ClientController
 		View = new ClientWindow();
 		View.updateChatArea(helpString);
 
-		// TODO add action listeners from FORM (view) here	
 		View.getConnectButton().addActionListener(new ConnectButtonHandler(this));
 		View.getInputField().addActionListener(new MessageInputHandler(this));
 
 		View.Show();
 	}
 	
-	public void initConnection(String Username, String Hostname)
+	public void initConnection(String Username, String Hostname) throws IOException
 	{
-		try
-		{
-			Model = new ClientModel(Username, Hostname);
-			Model.addListener(new MessageReceiveHandler(this));
-			Model.connect();
-			View.clearChatArea();	
-			Receiver = new Thread(new ServerReceiver(Model));
-			Sender = new Thread(new ServerSender(Model));
-			Receiver.setDaemon(true);
-			Sender.setDaemon(true);
-			Receiver.start();
-			Sender.start();
-		}
-		catch(IOException e)
-		{
-			// TODO error handling here (requesting reconnect from user)
-			View.clearChatArea();	
-			View.updateChatArea("CONNECTION FAILURE: try again\n");
-		}
-		
+		Model = new ClientModel(Username, Hostname);
+
+		Model.connect();
+		View.clearChatArea();	
+		Receiver = new Thread(new ServerReceiver(Model));
+		Sender = new Thread(new ServerSender(Model));
+		Receiver.setDaemon(true);
+		Sender.setDaemon(true);
+		Model.addListener(new ModelEventHandler(this));
+		Receiver.start();
+		Sender.start();
 	}
 	
 	public ClientModel getModel()
@@ -90,14 +80,19 @@ public class ClientController
 				"and press <<Connect>>\n\n";
 }
 
-class MessageReceiveHandler extends ClientController implements ModelListener
+class ModelEventHandler extends ClientController implements ModelListener
 {
-	MessageReceiveHandler(ClientController c)
+
+	ClientController parent;
+
+	ModelEventHandler(ClientController c)
 	{	
 		super();
 		this.Model = c.Model;		
 		this.View = c.View;		
 		this.Receiver = c.Receiver;		
+		this.Sender = c.Sender;
+		this.parent = c;	
 	}
 
 	public void onMessageReceived()
@@ -109,6 +104,18 @@ class MessageReceiveHandler extends ClientController implements ModelListener
 		}
 		View.updateChatArea(msg.toString());
 
+	}
+
+	synchronized public void onIOError()
+	{
+		Receiver.interrupt();
+		Sender.interrupt();
+
+		View.clearChatArea();
+		View.updateChatArea("CONNECTION FAILURE; try to reconnect\n");
+		
+		View.getUsernameField().setEnabled(true);
+		View.getHostnameField().setEnabled(true);
 	}
 }
 
@@ -131,7 +138,9 @@ class ConnectButtonHandler extends ClientController implements ActionListener
 		{
 			String Username = View.getUsernameField().getText();
 			String Hostname = View.getHostnameField().getText();
+
 			parent.initConnection(Username, Hostname);
+
 			View.getUsernameField().setEnabled(false);
 			View.getHostnameField().setEnabled(false);
 			View.getConnectButton().setEnabled(false);
@@ -140,8 +149,19 @@ class ConnectButtonHandler extends ClientController implements ActionListener
 		}
 		catch(NullPointerException exception)
 		{
+			View.getUsernameField().setEnabled(true);
+			View.getHostnameField().setEnabled(true);
+			View.getConnectButton().setEnabled(true);
 			View.clearChatArea();	
 			View.updateChatArea("ERROR: user or host name not specified; try again\n");
+		}
+		catch(IOException exception)
+		{
+			View.getUsernameField().setEnabled(true);
+			View.getHostnameField().setEnabled(true);
+			View.getConnectButton().setEnabled(true);
+			View.clearChatArea();	
+			View.updateChatArea("CONNECTION FAILURE: try again\n");
 		}
 	}
 }

@@ -5,23 +5,45 @@ import java.io.*;
 import java.net.*;
 
 
+/**
+* <h1> Server </h1>
+* 
+* Server application to broadcast messages to users
+* 
+* @author viviaxenov
+* @since 2019-04-18
+*/
 
 public class Server
 {
-	static String ServName = "Death Star comm";
-	static String greeting = "May the force be with  ";
+	static String ServName = "Server";
+	static String greeting = "Welcome, ";
+
 	static int prevMsg = 5;
 
 	static final int port = 9000;
 
 	private ServerSocket Listener;
 	LinkedList<Message> MessageQueue;
-
+	/**
+	* Tries to initialize server and establish socket listener
+	*
+	* @param port		port to establish listener
+	*
+	* @throws IOException 	if can't establish listener socket
+	*/
 	public Server(int port) throws IOException
 	{
 		MessageQueue = new LinkedList<Message>();
 		Listener = new ServerSocket(port);
 	}
+
+	/**
+	* Starts server's main routine: listening for user's connection and creating
+	* receiver and sender threads for users
+	*
+	*
+	*/
 
 	public void start() throws IOException
 	{
@@ -50,6 +72,17 @@ public class Server
 	}
 
 
+	/**
+	* Thread for sending messages to individual users
+	*
+	* 
+	*
+	*
+	*
+	*
+	*
+	*/
+
 	class UserSender extends Thread
 	{
 		Socket Connection;	
@@ -72,15 +105,15 @@ public class Server
 				while(true)
 				{
 					Message ToBeSent;
-					if(CurrentMessage < MessageQueue.size() - 1)
+					if(CurrentMessage < MessageQueue.size())
 					{
-						CurrentMessage++;
 						synchronized(MessageQueue)	
 						{
 							ToBeSent =  MessageQueue.get(CurrentMessage);
 						}
 						if(!(ToBeSent.text.equals("")))
 							Sender.writeObject(ToBeSent);
+						CurrentMessage++;
 						continue;
 					}
 					Thread.sleep(50);

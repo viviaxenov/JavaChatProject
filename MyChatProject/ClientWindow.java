@@ -29,12 +29,6 @@ public class ClientWindow {
 		ConnectButton.setEnabled(true);
 	}
 
-//	private void ConnectButtonActionPerformed(ActionEvent e) {
-//		UsernameField.setEnabled(false);
-//		HostnameField.setEnabled(false);
-//	}
-
-
 	private void initComponents() {
 		// JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
 		// Generated using JFormDesigner Evaluation license - Vitaliy Aksenov
@@ -56,7 +50,7 @@ public class ClientWindow {
 		{
 			ChatFrame.setResizable(false);
 			ChatFrame.setTitle("Best chat ever");
-			ChatFrame.setAlwaysOnTop(true);
+			ChatFrame.setAlwaysOnTop(false);
 			var ChatFrameContentPane = ChatFrame.getContentPane();
 			ChatFrameContentPane.setLayout(null);
 			ChatFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

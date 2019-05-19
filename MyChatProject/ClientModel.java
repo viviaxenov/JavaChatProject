@@ -8,7 +8,7 @@ import java.net.*;
 interface ModelListener
 {
 	void onMessageReceived();
-//	void onError();
+	void onIOError();
 //	TODO error handling in controller
 }
 
@@ -53,7 +53,6 @@ class ClientModel
 		{
 			Pending.offerLast(new Message(Username, text));
 		}
-	
 	}
 
 	
@@ -96,12 +95,18 @@ class ServerReceiver extends ClientModel implements Runnable
 					l.onMessageReceived();
 
 			}
-			catch(Exception e)
+			catch(IOException e)
 			{
 				//TODO: handling errors here
-//				for(ModelListener l:Listeners)
-//					l.onError();
+				for(ModelListener l:Listeners)
+					l.onIOError();
+				return;
+			}
+			catch(Exception e)
+			{
+				System.out.println("FATAL ERROR; ABORTING");
 				e.printStackTrace();
+				System.exit(-1);
 			}
 		}
 	}
@@ -129,7 +134,9 @@ class ServerSender extends ClientModel implements Runnable
 		try
 		{
 			// Greeting message for server to know our username
-			Sender.writeObject(new Message("", Username));
+			Message msg = new Message(Username, "");
+			Sender.writeObject(msg);
+			System.out.println(msg.toString());
 			
 			while(true)
 			{
@@ -144,12 +151,22 @@ class ServerSender extends ClientModel implements Runnable
 					Sender.writeObject(toBeSent);
 			}
 		}
-		catch(Exception e)
+		catch(IOException e)
 		{
 			//TODO: handling errors here
-//				for(ModelListener l:Listeners)
-//					l.onError();
+			for(ModelListener l:Listeners)
+				l.onIOError();
+			return;
+		}
+		catch(InterruptedException e)
+		{
+			return;
+		}
+		catch(Exception e)
+		{
+			System.out.println("FATAL ERROR; ABORTING");
 			e.printStackTrace();
+			System.exit(-1);
 		}
 		
 	}
