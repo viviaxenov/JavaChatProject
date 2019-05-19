@@ -1,11 +1,9 @@
-package MyChatProject;
-
 import java.util.*;
 import java.io.*;
 import java.net.*;
 
 
-public class TestClient 
+public class TextCient 
 {
 	static final int port = 9000;
 	

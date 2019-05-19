@@ -1,4 +1,4 @@
-package MyChatProject;
+package Client;
 
 import java.util.*;
 import java.io.*;
@@ -9,7 +9,6 @@ interface ModelListener
 {
 	void onMessageReceived();
 	void onIOError();
-//	TODO error handling in controller
 }
 
 class ClientModel 

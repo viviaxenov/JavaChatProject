@@ -1,4 +1,4 @@
-package MyChatProject;
+package Client;
 
 import java.io.*;
 import java.util.*;
@@ -8,6 +8,14 @@ import javax.swing.JTextField;
 
 public class ClientController
 {
+	/**
+	* <h1> ClientController </h1>
+	*
+	* Creates Model (ClientModel) and View (ClientWindow). 
+	* Passes input from View to Model, handles events
+	*/
+
+
 	protected ClientModel Model;
 	protected ClientWindow View;
 
@@ -18,6 +26,10 @@ public class ClientController
 	{
 		
 	}
+
+	/**
+	* Initializes View and starts listening to events
+	*/
 
 	public void openAppWindow()
 	{
@@ -40,7 +52,11 @@ public class ClientController
 		Sender = new Thread(new ServerSender(Model));
 		Receiver.setDaemon(true);
 		Sender.setDaemon(true);
+		// adding ModelEventHandler only after initializing Sender and Receiver threads
+		// because it also needs references to those threads
+		// TODO fix it somehow
 		Model.addListener(new ModelEventHandler(this));
+
 		Receiver.start();
 		Sender.start();
 	}
@@ -57,21 +73,8 @@ public class ClientController
 
 	public static void main(String[] args)
 	{
-		String Username = "Graphic Sych";
-		String Hostname = "localhost";
-	
-		if(args.length > 0)	
-		{
-			Username = args[0];
-		}
-		if(args.length > 1)	
-		{
-			Hostname = args[1];
-		}
-
 		ClientController c = new ClientController();
 		c.openAppWindow();
-		
 	}
 	
 	static final String helpString = 
@@ -80,11 +83,23 @@ public class ClientController
 				"and press <<Connect>>\n\n";
 }
 
+/**
+* <h1> ModelEventHandler </h1>
+* Class that has code for handling events on model
+* (receiving messages and errors)
+*/
+
+
 class ModelEventHandler extends ClientController implements ModelListener
 {
 
 	ClientController parent;
 
+	/**
+	* Copies all the params from parent ClientController
+	*
+	* @param c	ClientController - parent object
+	*/
 	ModelEventHandler(ClientController c)
 	{	
 		super();
@@ -95,6 +110,9 @@ class ModelEventHandler extends ClientController implements ModelListener
 		this.parent = c;	
 	}
 
+	/**
+	* Adds received message to the view
+	*/
 	public void onMessageReceived()
 	{
 		Message msg;
