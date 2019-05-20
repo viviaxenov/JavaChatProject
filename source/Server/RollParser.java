@@ -1,4 +1,4 @@
-package MyChatProject;
+package Server;
 
 import java.util.Random;
 

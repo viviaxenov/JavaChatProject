@@ -1,4 +1,5 @@
 package Client;
+import Message.Message;
 
 import java.util.*;
 import java.io.*;
@@ -135,7 +136,6 @@ class ServerSender extends ClientModel implements Runnable
 			// Greeting message for server to know our username
 			Message msg = new Message(Username, "");
 			Sender.writeObject(msg);
-			System.out.println(msg.toString());
 			
 			while(true)
 			{

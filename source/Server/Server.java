@@ -1,9 +1,9 @@
-package MyChatProject;
-
+package Server;
 import java.util.*;
 import java.io.*;
 import java.net.*;
 
+import Message.Message;
 
 /**
 * <h1> Server </h1>

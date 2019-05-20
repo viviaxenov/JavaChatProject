@@ -1,5 +1,8 @@
 package Client;
 
+
+import Message.Message;
+
 import java.io.*;
 import java.util.*;
 import java.net.*;
