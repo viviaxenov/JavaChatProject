@@ -3,7 +3,7 @@ import java.io.*;
 import java.net.*;
 
 
-public class TextCient 
+public class TextClient 
 {
 	static final int port = 9000;
 	
